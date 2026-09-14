@@ -60,7 +60,7 @@ button:focus-visible, input:focus-visible { outline: 1px solid var(--accent); ou
 .landing { min-height: 100vh; position: relative; overflow: hidden; background: var(--graphite); isolation: isolate; }
 .landing-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -4; }
 .landing-shade { position: absolute; inset: 0; z-index: -3; background: linear-gradient(90deg, color-mix(in oklab,var(--graphite) 98%,transparent) 0%,color-mix(in oklab,var(--graphite) 86%,transparent) 39%,color-mix(in oklab,var(--graphite) 20%,transparent) 78%),linear-gradient(0deg,color-mix(in oklab,var(--graphite) 92%,transparent),transparent 48%); }
-.landing-grid { position:absolute; inset:0; z-index:-2; opacity:.2; background-image:linear-gradient(color-mix(in oklab,var(--accent) 14%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in oklab,var(--accent) 14%,transparent) 1px,transparent 1px); background-size:80px 80px; mask-image:linear-gradient(90deg,#000,transparent 62%); }
+.landing-grid { position:absolute; inset:0; z-index:-2; opacity:.2; background-image:linear-gradient(color-mix(in oklab,var(--accent) 14%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in oklab,var(--accent) 14%,transparent) 1px,transparent 1px); background-size:80px 80px; mask-image:linear-gradient(90deg,var(--foreground),transparent 62%); }
 .landing-top { height: 98px; margin: 0 3.25vw; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
 .brand-lockup { display:flex; align-items:center; gap:13px; min-width:0; }
 .brand-lockup img { width:52px; height:52px; object-fit:contain; background:var(--foreground); border-radius:2px; }
