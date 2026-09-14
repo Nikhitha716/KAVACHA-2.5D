@@ -99,11 +99,6 @@ function KavachaApp() {
       setProcessingStep((step) => {
         if (step >= 4) {
           window.clearInterval(timer);
-
-          window.setTimeout(() => {
-            setScreen("results");
-          }, 700);
-
           return 5;
         }
 
