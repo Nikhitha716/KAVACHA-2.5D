@@ -27,6 +27,19 @@ import terrainImage from "@/assets/kavacha-terrain.jpg";
 type Screen = "landing" | "acquisition" | "processing" | "results" | "analysis" | "system";
 type VideoMeta = { name: string; duration: number; width: number; height: number };
 
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+
+type MissionResult = {
+  status: string;
+  mission: {
+    filename: string;
+    frames: number;
+    duration_seconds: number;
+  };
+  output: {
+    video: string;
+  };
+};
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -68,6 +81,7 @@ function KavachaApp() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [inputUrl, setInputUrl] = useState<string>();
   const [outputUrl, setOutputUrl] = useState<string>();
+  const [inputFile, setInputFile] = useState<File>();
   const [videoMeta, setVideoMeta] = useState<VideoMeta>();
   const [processingStep, setProcessingStep] = useState(0);
 
@@ -77,20 +91,23 @@ function KavachaApp() {
   }, [inputUrl, outputUrl]);
 
   useEffect(() => {
-    if (screen !== "processing") return;
-    setProcessingStep(0);
-    const timer = window.setInterval(() => {
-      setProcessingStep((step) => {
-        if (step >= 4) {
-          window.clearInterval(timer);
-          window.setTimeout(() => setScreen("results"), 700);
-          return 5;
-        }
-        return step + 1;
-      });
-    }, 650);
-    return () => window.clearInterval(timer);
-  }, [screen]);
+  if (screen !== "processing") return;
+
+  setProcessingStep(0);
+
+  const timer = window.setInterval(() => {
+    setProcessingStep((step) => {
+      if (step >= 4) {
+        window.clearInterval(timer);
+        return 5;
+      }
+
+      return step + 1;
+    });
+  }, 650);
+
+  return () => window.clearInterval(timer);
+}, [screen]);
 
   const handleVideo = (event: ChangeEvent<HTMLInputElement>, kind: "input" | "output") => {
     const file = event.target.files?.[0];
@@ -102,6 +119,7 @@ function KavachaApp() {
       return;
     }
     if (inputUrl) URL.revokeObjectURL(inputUrl);
+    setInputFile(file);
     setInputUrl(url);
     setVideoMeta({ name: file.name, duration: Number.NaN, width: 0, height: 0 });
     const probe = document.createElement("video");
@@ -112,11 +130,61 @@ function KavachaApp() {
     probe.src = url;
   };
 
+  const runMission = async () => {
+  if (!inputFile) return;
+
+  if (!API_BASE_URL) {
+    window.alert("KAVACHA backend URL is not configured.");
+    return;
+  }
+
+  setScreen("processing");
+  setProcessingStep(0);
+
+  try {
+    const formData = new FormData();
+    formData.append("video", inputFile);
+
+    const response = await fetch(`${API_BASE_URL}/run-mission`, {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = (await response.json()) as MissionResult;
+
+    if (!response.ok || data.status !== "complete") {
+      throw new Error(
+        "message" in data
+          ? String((data as MissionResult & { message?: string }).message)
+          : "KAVACHA mission processing failed."
+      );
+    }
+
+    const backendOutputUrl = `${API_BASE_URL}${data.output.video}`;
+
+    setOutputUrl(backendOutputUrl);
+    setProcessingStep(5);
+
+    window.setTimeout(() => {
+      setScreen("results");
+    }, 700);
+  } catch (error) {
+    console.error("KAVACHA backend error:", error);
+
+    window.alert(
+      "KAVACHA backend could not process this mission. Please try again."
+    );
+
+    setScreen("acquisition");
+  }
+};
+
   const resetMission = () => {
     if (inputUrl) URL.revokeObjectURL(inputUrl);
     if (outputUrl) URL.revokeObjectURL(outputUrl);
     setInputUrl(undefined);
     setOutputUrl(undefined);
+    setInputFile(undefined);
     setVideoMeta(undefined);
     setScreen("acquisition");
   };
