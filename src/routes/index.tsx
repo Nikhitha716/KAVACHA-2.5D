@@ -103,6 +103,7 @@ function KavachaApp() {
     }
     if (inputUrl) URL.revokeObjectURL(inputUrl);
     setInputUrl(url);
+    setVideoMeta({ name: file.name, duration: Number.NaN, width: 0, height: 0 });
     const probe = document.createElement("video");
     probe.preload = "metadata";
     probe.onloadedmetadata = () => {
@@ -211,7 +212,7 @@ function Acquisition({ inputUrl, outputUrl, meta, onVideo, onProcess }: { inputU
       <div className="acquisition-readout">
         <Readout icon={<FileVideo size={16} />} label="MISSION VIDEO" value={meta?.name ?? "NOT ACQUIRED"} />
         <Readout label="DURATION" value={meta ? formatDuration(meta.duration) : "--:--"} />
-        <Readout label="RESOLUTION" value={meta ? `${meta.width} × ${meta.height}` : "---- × ----"} />
+        <Readout label="RESOLUTION" value={meta?.width ? `${meta.width} × ${meta.height}` : "---- × ----"} />
         <Readout label="FRAME COUNT" value={meta ? "AVAILABLE AFTER PIPELINE" : "-----"} />
         <div className="mission-acquired"><Status label={inputUrl ? "MISSION VIDEO ACQUIRED" : "AWAITING INPUT"} /></div>
       </div>
