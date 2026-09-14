@@ -85,6 +85,54 @@ function KavachaApp() {
   const [videoMeta, setVideoMeta] = useState<VideoMeta>();
   const [processingStep, setProcessingStep] = useState(0);
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+
+  const runMission = async () => {
+    const inputFile = (document.querySelector(
+      'input[type="file"][accept="video/*"]'
+    ) as HTMLInputElement)?.files?.[0];
+
+    if (!inputFile) {
+      window.alert("Please acquire a mission video first.");
+      return;
+    }
+
+    if (!API_BASE_URL) {
+      window.alert("KAVACHA backend URL is not configured.");
+      return;
+    }
+
+    setScreen("processing");
+    setProcessingStep(0);
+
+    try {
+      const formData = new FormData();
+      formData.append("video", inputFile);
+
+      const response = await fetch(`${API_BASE_URL}/run-mission`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || data.status !== "complete") {
+        throw new Error(data.message || "KAVACHA mission processing failed.");
+      }
+
+      setOutputUrl(`${API_BASE_URL}${data.output.video}`);
+      setProcessingStep(5);
+
+      window.setTimeout(() => {
+        setScreen("results");
+      }, 700);
+    } catch (error) {
+      console.error("KAVACHA backend error:", error);
+      window.alert("KAVACHA backend could not process this mission.");
+      setScreen("acquisition");
+    }
+  };
+
   useEffect(() => () => {
     if (inputUrl) URL.revokeObjectURL(inputUrl);
     if (outputUrl) URL.revokeObjectURL(outputUrl);
@@ -196,7 +244,7 @@ function KavachaApp() {
       <Sidebar current={screen} open={sidebarOpen} onToggle={() => setSidebarOpen((value) => !value)} onSelect={setScreen} />
       <main className="console-main">
         <ConsoleHeader screen={screen} onMenu={() => setSidebarOpen((value) => !value)} />
-        {screen === "acquisition" && <Acquisition inputUrl={inputUrl} outputUrl={outputUrl} meta={videoMeta} onVideo={handleVideo} onProcess={() => setScreen("processing")} />}
+        {screen === "acquisition" && <Acquisition inputUrl={inputUrl} outputUrl={outputUrl} meta={videoMeta} onVideo={handleVideo} onProcess={runMission} />}
         {screen === "processing" && <Processing activeStep={processingStep} />}
         {screen === "results" && <Results inputUrl={inputUrl} outputUrl={outputUrl} meta={videoMeta} onAnalysis={() => setScreen("analysis")} />}
         {screen === "analysis" && <Analysis />}
