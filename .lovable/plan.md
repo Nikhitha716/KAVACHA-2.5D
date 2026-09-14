@@ -15,7 +15,7 @@ Build a polished, desktop-first reconnaissance console that moves through missio
 - Use **IBM Plex Sans** with **IBM Plex Mono** for instrumentation; no serif, gradients, purple, glassmorphism, or decorative military imagery.
 - Use the selected **Mission Sidebar** structure: a narrow persistent command rail and full-height operational workspace.
 - Build integrated engineering modules with precise 1px separators, mild corners, sensor grids, contour lines, scan sweeps, technical brackets, and restrained saffron/green status details.
-- Generate one non-branded cinematic autonomous UGV terrain/sensor visual. The official KAVACHA logo will remain untouched and will be inserted only from the supplied file.
+- Generate one non-branded cinematic autonomous UGV terrain/sensor visual. Use the supplied official KAVACHA logo unchanged throughout the application and derive the favicon from the same asset.
 
 ## Functional Details
 - Keep mission state in the frontend and support reset/new-mission flow.
@@ -36,5 +36,5 @@ Build a polished, desktop-first reconnaissance console that moves through missio
 - Confirm uploaded metadata and playback, processing transition, navigation, labels, exact supplied values, no prohibited colors, and no overlapping content.
 - Confirm every screen uses the official logo once the file is attached.
 
-## Required Asset
-The official KAVACHA logo is not currently visible in the uploaded files. The implementation will not redraw or replace it; the exact logo file must be attached before final completion.
+## Supplied Asset
+Use the attached official KAVACHA logo exactly as provided. Do not redraw, reinterpret, simplify, regenerate, or replace it.
