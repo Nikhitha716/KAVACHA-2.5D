@@ -195,7 +195,7 @@ function ConsoleHeader({ screen, onMenu }: { screen: Screen; onMenu: () => void 
   );
 }
 
-function Acquisition({ inputUrl, outputUrl, meta, onVideo, onProcess }: { inputUrl?: string; outputUrl?: string; meta?: VideoMeta; onVideo: (event: ChangeEvent<HTMLInputElement>, kind: "input" | "output") => void; onProcess: () => void }) {
+function Acquisition({ inputUrl, outputUrl, meta, onVideo, onProcess }: { inputUrl: string | undefined; outputUrl: string | undefined; meta: VideoMeta | undefined; onVideo: (event: ChangeEvent<HTMLInputElement>, kind: "input" | "output") => void; onProcess: () => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const outputRef = useRef<HTMLInputElement>(null);
   return (
@@ -237,7 +237,7 @@ function Processing({ activeStep }: { activeStep: number }) {
   );
 }
 
-function Results({ inputUrl, outputUrl, meta, onAnalysis }: { inputUrl?: string; outputUrl?: string; meta?: VideoMeta; onAnalysis: () => void }) {
+function Results({ inputUrl, outputUrl, meta, onAnalysis }: { inputUrl: string | undefined; outputUrl: string | undefined; meta: VideoMeta | undefined; onAnalysis: () => void }) {
   return (
     <section className="screen results-screen animate-fade-in">
       <ScreenTitle code="RSLT / M01" title="Real-World Reconnaissance → KAVACHA Representation" subtitle="Prepared demonstration result synchronized with the acquired mission feed." />
