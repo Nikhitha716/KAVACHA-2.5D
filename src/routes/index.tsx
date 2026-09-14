@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 
-import kavachaLogo from "@/assets/kavacha-official-logo.png";
+
 import terrainImage from "@/assets/kavacha-terrain.jpg";
 
 type Screen = "landing" | "acquisition" | "processing" | "results" | "analysis" | "system";
@@ -214,7 +214,7 @@ function KavachaApp() {
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`brand-lockup ${compact ? "brand-compact" : ""}`}>
-      <img src={kavachaLogo.url} alt="KAVACHA official logo" />
+      <img src="/kavacha-logo.png" alt="KAVACHA official logo" />
       {!compact && <div><strong>KAVACHA</strong><span>ADAPTIVE 2.5D RECONNAISSANCE</span></div>}
     </div>
   );
@@ -229,7 +229,7 @@ function Landing({ onInitialize }: { onInitialize: () => void }) {
       <header className="landing-top"><Brand /><Status label="SYSTEM READY" /></header>
       <section className="landing-content">
         <div className="coordinate-label">SYS / KVC-2.5D &nbsp;&nbsp; 28.6139° N / 77.2090° E</div>
-        <div className="landing-logo-wrap"><img src={kavachaLogo.url} alt="KAVACHA official logo" /></div>
+        <div className="landing-logo-wrap"><img src="/kavacha-logo.png" alt="KAVACHA official logo" /></div>
         <p className="eyebrow">AUTONOMOUS UGV ENVIRONMENT PERCEPTION</p>
         <h1>KAVACHA</h1>
         <h2>Adaptive 2.5D Reconnaissance System</h2>
