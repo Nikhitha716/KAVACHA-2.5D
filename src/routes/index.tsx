@@ -157,12 +157,16 @@ function KavachaApp() {
       if (inputUrl) {
         URL.revokeObjectURL(inputUrl);
       }
+    };
+  }, [inputUrl]);
 
+  useEffect(() => {
+    return () => {
       if (outputUrl?.startsWith("blob:")) {
         URL.revokeObjectURL(outputUrl);
       }
     };
-  }, [inputUrl, outputUrl]);
+  }, [outputUrl]);
 
   /*
    * Processing animation only.
