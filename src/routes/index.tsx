@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 
-import kavachaLogo from "@/assets/kavacha-official-logo.png.asset.json";
+import kavachaLogo from "@/assets/kavacha-official-logo.png";
 import terrainImage from "@/assets/kavacha-terrain.jpg";
 
 type Screen = "landing" | "acquisition" | "processing" | "results" | "analysis" | "system";
@@ -91,23 +91,28 @@ function KavachaApp() {
   }, [inputUrl, outputUrl]);
 
   useEffect(() => {
-  if (screen !== "processing") return;
+    if (screen !== "processing") return;
 
-  setProcessingStep(0);
+    setProcessingStep(0);
 
-  const timer = window.setInterval(() => {
-    setProcessingStep((step) => {
-      if (step >= 4) {
-        window.clearInterval(timer);
-        return 5;
-      }
+    const timer = window.setInterval(() => {
+      setProcessingStep((step) => {
+        if (step >= 4) {
+          window.clearInterval(timer);
 
-      return step + 1;
-    });
-  }, 650);
+          window.setTimeout(() => {
+            setScreen("results");
+          }, 700);
 
-  return () => window.clearInterval(timer);
-}, [screen]);
+          return 5;
+        }
+
+        return step + 1;
+      });
+    }, 650);
+
+    return () => window.clearInterval(timer);
+  }, [screen]);
 
   const handleVideo = (event: ChangeEvent<HTMLInputElement>, kind: "input" | "output") => {
     const file = event.target.files?.[0];
